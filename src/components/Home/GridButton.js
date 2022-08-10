@@ -1,16 +1,31 @@
 import styled from "styled-components"; 
+import { useDrop } from "react-dnd";
+import { ItemTypes } from "utils/Constants";
+import { useState } from "react";
 
 export default function GridButton({ isPlayed = false, soundPlay, id, handleSampleChange }) {
+
+  const [name, setName] = useState('')
+  
+  const [collectedProps, drop] = useDrop(() => ({
+    accept: ItemTypes.INSTRUMENT,
+    drop: (item) => {
+    alert('Vous avez déposé ' + item.property + ' dans la case ' + id);
+    handleSampleChange(item.property);
+    setName(item.fullName)
+    },
+  }),
+
+  )
   return (
-  <Wrapper isPlayed={isPlayed} onClick={soundPlay}>
-    <label onClick={e => e.stopPropagation()} htmlFor={id}>🎵</label>
-    <input 
-      onClick={e => e.stopPropagation()} 
-      id={id} 
-      type='file'
-      onChange={handleSampleChange} />
-  </Wrapper>
-  );
+    <Wrapper 
+      isPlayed={isPlayed} 
+      onClick={soundPlay}
+      ref={drop}
+    >
+    <div>{name}</div>
+    </Wrapper>
+    );
 };
 
 const Wrapper = styled.div`
@@ -52,14 +67,12 @@ const Wrapper = styled.div`
       rgba(118, 84, 154, 100) 160%
     );
   }
-  & input {
-    display: none;
-  } 
 
-  & label {
+  & div {
     position: absolute;
-    right: 12px;
-    top: 12px; 
-    font-size: 24px;
+    color: ${(props) => props.theme.backgroundColor};
+    font-size: 0.8rem;
+    padding: 0.3rem;
   }
+  
 `  

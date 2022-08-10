@@ -1,32 +1,39 @@
 import styled from "styled-components";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
+import SoundsList from "components/SoundsList";
 import GridButton from "./GridButton";
 import useSounds from "hooks/useSounds";
 
 export default function Home () {
-  const { buttonsList } = useSounds();
+  const { buttonsList, sounds } = useSounds();
   return (
-    <Wrapper>
-      <Grid>
-        {buttonsList.map(({ soundPlay, isPlayed, id, handleSampleChange }, index) => {
-          return (
-            <GridButton 
-              key={index} 
-              soundPlay={soundPlay} 
-              isPlayed={isPlayed} 
-              id={id} 
-              handleSampleChange={handleSampleChange }
-            />
-          );
-        })}
-      </Grid>
-    </Wrapper>
+    <DndProvider backend={HTML5Backend}>
+      <Wrapper>
+        <Grid>
+          {buttonsList.map(({ soundPlay, isPlayed, id, handleSampleChange }, index) => {
+            return (
+              <GridButton 
+                key={index} 
+                soundPlay={soundPlay} 
+                isPlayed={isPlayed} 
+                id={id} 
+                handleSampleChange={handleSampleChange}
+              />
+            );
+          })}
+        </Grid>
+        <SoundsList soundsList={sounds}/>
+      </Wrapper>
+    </DndProvider>
   );
 };
 
 const Wrapper = styled.div`
   width: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
 `
 

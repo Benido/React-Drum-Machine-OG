@@ -1,10 +1,16 @@
 import { useState, useEffect, useRef } from 'react';
 import * as Tone from 'tone';
 
-import hh1 from 'assets/sounds/hh1.wav'
-import kick from 'assets/sounds/kick.wav'
-import perc1 from 'assets/sounds/perc1.wav'
-import snare from 'assets/sounds/snare.wav'
+import ace_hh1 from 'assets/sounds/Ace_hh1.wav';
+import ace_kick from 'assets/sounds/Ace_kick.wav';
+import ace_perc1 from 'assets/sounds/Ace_perc1.wav';
+import ace_snare from 'assets/sounds/Ace_snare.wav';
+import hammond_hh from 'assets/sounds/Hammond_hh.wav';
+import hammond_kick_hat from 'assets/sounds/Hammond_kick_hat.wav';
+import hammond_rapid_snare from 'assets/sounds/Hammond_rapid_snare.wav';
+import hammond_snare from 'assets/sounds/Hammond_snare.wav';
+import hammond_tom from 'assets/sounds/Hammond_tom.wav';
+import hammond_wood_block from 'assets/sounds/Hammond_wood_block.wav';
 
 export default function useSounds() {
 
@@ -15,12 +21,40 @@ export default function useSounds() {
   const [isHHPlayed, setIsHHPlayed] = useState(false)
   const [isSnarePlayed, setIsSnarePlayed] = useState(false)
 
+  // const sounds = [
+  //   {url: ace_hh1, key: 'ace_hh1'},
+  //   {url: ace_kick, key: 'ace_kick'},
+  //   {url: ace_perc1, key: 'ace_perc1'},
+  //   {url: ace_snare, key: 'ace_snare'},
+  //   {url: hammond_hh, key: 'hammond_hh'},
+  //   {url: hammond_kick_hat, key: 'hammond_kick_hat'},
+  //   {url: hammond_snare, key: 'hammond_snare'},
+  //   {url: hammond_rapid_snare, key: 'hammond_rapid_snare'},
+  //   {url: hammond_tom, key: 'hammond_tom'},
+  //   {url: hammond_wood_block, key: 'hammond_wood_block'}
+  // ]
+
+  const sounds = {
+    ace_hh1: {fullName: 'Ace High-hat 1', url: ace_hh1, img: ''},
+    ace_kick: {fullName: 'Ace Kick', url: ace_kick, img: ''},
+    ace_perc1: {fullName: 'Ace Percussion 1', url: ace_perc1, img: ''},
+    ace_snare: {fullName: 'Ace Snare', url: ace_snare, img: ''},
+    hammond_hh: {fullName: 'Hammond High-hat', url: hammond_hh, img: ''},
+    hammond_kick_hat: {fullName: 'Hammond Kick-hat', url: hammond_kick_hat, img: ''},
+    hammond_snare: {fullName: 'Hammond Snare', url: hammond_snare, img: ''},
+    hammond_rapid_snare: {fullName: 'Hammond Rapid snare', url: hammond_rapid_snare, img: ''},
+    hammond_tom: {fullName: 'Hammond Tom', url: hammond_tom, img: ''},
+    hammond_wood_block: {fullName: 'Hammond Wood block', url: hammond_wood_block, img: ''}
+  }
+
+
+
   useEffect(() => {
     const sampler = new Tone.Sampler({      
-        "C4": kick,
-        "D#4": perc1,
-        "F#4": hh1,
-        "A4": snare,
+        "C4": ace_kick,
+        "D#4": ace_perc1,
+        "F#4": ace_hh1,
+        "A4": ace_snare,
     }).toDestination();
 
     Tone.loaded().then(() => {
@@ -69,10 +103,10 @@ export default function useSounds() {
     }
   })
 
-  function handleSampleChange(note, file) {
-    let fileURL = URL.createObjectURL(file);
-    let buffer = new Tone.Buffer(fileURL);
-    mySampler.current.add(note, buffer, () => alert('Sample succesfully changed'));
+
+  function handleSampleChange(note, property) {
+
+      mySampler.current.add(note, sounds[property].url);
 
   }
  
@@ -80,28 +114,29 @@ export default function useSounds() {
     {
       soundPlay: () => soundPlay("C4"),
       isPlayed: isKickPlayed,
-      id: 'kick',
-      handleSampleChange: (e) => handleSampleChange('C4', e.target.files[0]),
+      id: 'C4',
+      handleSampleChange: (property) => handleSampleChange('C4', property)
+      ,
     },
     {
       soundPlay: () => soundPlay("D#4"),
       isPlayed: isPercPlayed,
-      id: 'perc',
-      handleSampleChange: (e) => handleSampleChange('D#4', e.target.files[0]),
+      id: 'D#4',
+      handleSampleChange: (property) => handleSampleChange('D#4', property),
     },
     {
       soundPlay: () => soundPlay("F#4"),
       isPlayed: isHHPlayed,
-      id: 'hh',
-      handleSampleChange: (e) => handleSampleChange('F#4', e.target.files[0]),
+      id: 'F#4',
+      handleSampleChange: (property) => handleSampleChange('F#4', property),
     },
     {
       soundPlay: () => soundPlay("A4"),
       isPlayed: isSnarePlayed,
-      id: 'snare',
-      handleSampleChange: (e) => handleSampleChange('A4', e.target.files[0]),
+      id: 'A4',
+      handleSampleChange: (property) => handleSampleChange('A4', property),
     }  
   ]
 
-  return { buttonsList };
+  return { buttonsList, sounds };
 } 
