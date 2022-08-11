@@ -4,11 +4,11 @@ import { useDrag } from "react-dnd";
 import { ItemTypes } from "utils/Constants";
 
 
-export default function Instrument({ property, fullName, children }) {
+export default function Instrument({ property, value, children }) {
 
   const [{isDragging}, drag] = useDrag(() => ({
     type: ItemTypes.INSTRUMENT,
-    item: { property, fullName } ,
+    item: { property, value } ,
     collect: monitor => ({
       isDragging: !!monitor.isDragging(),
     }),
@@ -29,10 +29,15 @@ export default function Instrument({ property, fullName, children }) {
 
 const StyledInstrument = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  text-align: center;
+  padding: 0.8rem;
   color: black;
-  border: solid 1px;
+  border-radius: 4px;
   font-size: 0.8rem; 
-  background: ${props => props.theme.secondaryColor} 
+  background: ${props => props.theme.secondaryColor};
+  box-shadow: 5px 3px 3px gray;
+  overflow: hidden;
 `

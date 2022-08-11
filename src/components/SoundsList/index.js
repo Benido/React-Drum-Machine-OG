@@ -9,7 +9,8 @@ export default function SoundsList ({ soundsList}) {
       {Object.keys(soundsList).map((key, index) => {
           
           return (
-            <Instrument key={index} property={key} fullName={soundsList[key].fullName}>
+            <Instrument key={index} property={key} value={soundsList[key]}>
+              <Img src={soundsList[key].img} alt={soundsList[key].imgAlt} />
               {soundsList[key].fullName}
             </Instrument>
           )
@@ -28,10 +29,16 @@ const Wrapper = styled.div`
   border: solid 1px;
   background: ${props => props.theme.mainColor};
   display: grid;
-  grid-template-columns: repeat(auto-fill, 150px);
-  grid-template-rows: repeat(auto-fill, 150px);
+  grid-template-columns: repeat(auto-fill, 120px);
+  grid-template-rows: repeat(auto-fill, 120px);
   column-gap: 12px;
   row-gap: 12px;
+  `
+  const Img = styled.img`
+    max-height: 50px;
+    max-width: 50px;
+    object-fit: contain;
+    margin: 0.5rem;
 
-`
+  `
 

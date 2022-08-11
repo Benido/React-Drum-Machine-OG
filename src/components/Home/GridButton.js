@@ -5,25 +5,33 @@ import { useState } from "react";
 
 export default function GridButton({ isPlayed = false, soundPlay, id, handleSampleChange }) {
 
-  const [name, setName] = useState('')
+  const [item, setItem] = useState({})
   
-  const [collectedProps, drop] = useDrop(() => ({
+  const [{collectedProps, isOver}, drop] = useDrop(() => ({
     accept: ItemTypes.INSTRUMENT,
     drop: (item) => {
-    alert('Vous avez déposé ' + item.property + ' dans la case ' + id);
     handleSampleChange(item.property);
-    setName(item.fullName)
+    setItem(item.value)
+    console.log(item.value)
     },
+    collect: (monitor) => ({
+      isOver: !!monitor.isOver(),
+    })
   }),
 
   )
   return (
     <Wrapper 
-      isPlayed={isPlayed} 
+      isPlayed={isPlayed}
+      isOver={isOver} 
       onClick={soundPlay}
       ref={drop}
     >
-    <div>{name}</div>
+      <div>
+        <p>{item.fullName}</p> 
+        <img src={item.img} alt={item.imgAlt} />
+      </div>     
+      
     </Wrapper>
     );
 };
@@ -38,6 +46,7 @@ const Wrapper = styled.div`
   );
   position: relative;
   overflow: hidden;
+  box-shadow: 6px 5px 5px gray;
 
   &::before{
     position: absolute;
@@ -52,7 +61,7 @@ const Wrapper = styled.div`
       rgba(223, 120, 97, 100) ${(props) => (props.isPlayed ? "30%" : "0%")},
       rgba(118, 84, 154, 100) 160%
     );
-    opacity: ${(props) => (props.isPlayed ? "1" : "0")};
+    opacity: ${(props) => (props.isPlayed || props.isOver ? "1" : "0")};
   }
   
   &:hover::before {
@@ -69,10 +78,21 @@ const Wrapper = styled.div`
   }
 
   & div {
+    width: 100%;
     position: absolute;
+    display: flex;
+    justify-content: space-between;
     color: ${(props) => props.theme.backgroundColor};
     font-size: 0.8rem;
     padding: 0.3rem;
+    user-select: none;
+  }
+
+  & img {
+    max-height: 40px;
+    max-width: 40px;
+    object-fit: contain;
+    margin-right: 1em;
   }
   
 `  
